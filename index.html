@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title> chat </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://code.jquery.com/jquery-latest.min.js">
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="wel">
+                    <h3>Users</h3>
+                    <ul class="list-group" id="users">
+
+
+                    </ul>
+
+                </div>
+
+            </div>
+            <div class="col-md-8">
+                <div class="chat" id="chat">
+
+
+                </div>
+                <form id="messageForm">
+                    <div class="form-group">
+                        <label>Entry Message</label>
+                        <textarea id="message" class="form-control"></textarea><br/>
+                        <input type="submit" class="btn bth-primary" value="Sent"> </div>
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script>
+        $(function() {
+            var socket = io.connect();
+            var messageForm = $("#messageForm");
+            var message = $("#message");
+            var chat = $("#chat");
+
+            messageForm.submit(function(e) {
+                e.preventDefault();
+                socket.emit("send message", message.val());
+                message.val("");
+            })
+            socket.on('new message', function(data) {
+
+                chat.append("<div class=well>" + data.msg + "</div>");
+            })
+
+        });
+    </script>
+
+</body>
+
+</html>
